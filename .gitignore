@@ -28,3 +28,6 @@ ios/*.xccheckout
 ios/*.xcscmblueprint
 ios/Carthage/
 ios/.swiftpm/
+ios/build/
+ios/*.xcarchive
+ios/ExportOptions.plist*
