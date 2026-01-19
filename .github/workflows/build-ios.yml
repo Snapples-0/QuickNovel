@@ -23,12 +23,16 @@ jobs:
           xcode-version: latest-stable
 
       - name: Install CocoaPods
+        shell: bash
         run: |
+          set +u
           cd ios
           pod install --repo-update
 
       - name: Build and Archive
+        shell: bash
         run: |
+          set +u
           cd ios
           xcodebuild archive \
             -workspace QuickNovel.xcworkspace \
@@ -39,7 +43,10 @@ jobs:
             -destination "generic/platform=iOS" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            EXPANDED_CODE_SIGN_IDENTITY="" \
+            EXPANDED_CODE_SIGN_IDENTITY_NAME="" \
+            COCOAPODS_PARALLEL_CODE_SIGN=false
 
       - name: Export IPA
         run: |
