@@ -28,7 +28,7 @@ post_install do |installer|
     
     # Strategy 1: Wrap source commands with conditional checks
     # Replace any 'source "$VAR"' with proper null checks
-    if frameworks_script.gsub!(/^(\s*)source "\$([A-Z_]+)"/) do |match|
+    if frameworks_script.gsub!(/^(\s*)source "\$([A-Z_][A-Z0-9_]*)"/) do |match|
       indent = $1
       var_name = $2
       "#{indent}if [ -n \"${#{var_name}:-}\" ] && [ -f \"$#{var_name}\" ]; then source \"$#{var_name}\"; fi"
@@ -38,24 +38,36 @@ post_install do |installer|
     
     # Strategy 2: Temporarily disable unbound variable checking around source commands
     # Insert 'set +u' before and 'set -u' after source commands if not already wrapped
-    lines = frameworks_script.split("\n")
-    new_lines = []
-    lines.each_with_index do |line, index|
-      new_lines << line
-      # If this is a source command and not already wrapped with our fix
-      if line =~ /^\s*source "\$/ && !line.include?('if [ -n')
-        # Insert set +u before the source line (go back and insert)
-        prev_line = new_lines[-2]
-        unless prev_line&.include?('set +u')
-          new_lines.insert(-2, "set +u  # Temporarily allow unbound variables")
-          new_lines << "set -u  # Re-enable unbound variable checking"
-          modified = true
+    if !modified
+      lines = frameworks_script.split("\n")
+      new_lines = []
+      i = 0
+      while i < lines.length
+        line = lines[i]
+        # If this is a source command and not already wrapped with our fix
+        if line =~ /^\s*source "\$[^"]+\"/ && !line.include?('if [ -n')
+          # Check if previous line already has set +u
+          prev_line = new_lines.last
+          unless prev_line&.include?('set +u')
+            new_lines << "set +u  # Temporarily allow unbound variables"
+            new_lines << line
+            new_lines << "set -u  # Re-enable unbound variable checking"
+            modified = true
+            i += 1
+            next
+          end
         end
+        new_lines << line
+        i += 1
+      end
+      
+      if modified
+        frameworks_script = new_lines.join("\n")
       end
     end
     
     if modified
-      File.write(frameworks_script_path, new_lines.join("\n"))
+      File.write(frameworks_script_path, frameworks_script)
       puts "✓ Patched Pods-QuickNovel-frameworks.sh to handle unbound variables"
     end
   end
