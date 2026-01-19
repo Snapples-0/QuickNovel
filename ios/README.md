@@ -80,6 +80,12 @@ make help       # Show all available commands
 
 ## Troubleshooting
 
+### "unbound variable" Error During Build
+If you encounter a "source: unbound variable" error from the CocoaPods frameworks script:
+1. This is automatically fixed by the Podfile's post_install hook
+2. Run `pod install` to regenerate the scripts with the fix applied
+3. The fix adds proper null checks before sourcing variables in the generated script
+
 ### "Command not found: pod"
 Install CocoaPods:
 ```bash

@@ -16,4 +16,47 @@ post_install do |installer|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
     end
   end
+  
+  # Fix for unbound variable error in Pods-QuickNovel-frameworks.sh
+  # The script fails at line 42 when trying to source an unset variable
+  # GitHub Issue: https://github.com/CocoaPods/CocoaPods/issues/11402
+  frameworks_script_path = File.join(Dir.pwd, 'Pods/Target Support Files/Pods-QuickNovel/Pods-QuickNovel-frameworks.sh')
+  
+  if File.exist?(frameworks_script_path)
+    frameworks_script = File.read(frameworks_script_path)
+    modified = false
+    
+    # Strategy 1: Wrap source commands with conditional checks
+    # Replace any 'source "$VAR"' with proper null checks
+    if frameworks_script.gsub!(/^(\s*)source "\$([A-Z_]+)"/) do |match|
+      indent = $1
+      var_name = $2
+      "#{indent}if [ -n \"${#{var_name}:-}\" ] && [ -f \"$#{var_name}\" ]; then source \"$#{var_name}\"; fi"
+    end
+      modified = true
+    end
+    
+    # Strategy 2: Temporarily disable unbound variable checking around source commands
+    # Insert 'set +u' before and 'set -u' after source commands if not already wrapped
+    lines = frameworks_script.split("\n")
+    new_lines = []
+    lines.each_with_index do |line, index|
+      new_lines << line
+      # If this is a source command and not already wrapped with our fix
+      if line =~ /^\s*source "\$/ && !line.include?('if [ -n')
+        # Insert set +u before the source line (go back and insert)
+        prev_line = new_lines[-2]
+        unless prev_line&.include?('set +u')
+          new_lines.insert(-2, "set +u  # Temporarily allow unbound variables")
+          new_lines << "set -u  # Re-enable unbound variable checking"
+          modified = true
+        end
+      end
+    end
+    
+    if modified
+      File.write(frameworks_script_path, new_lines.join("\n"))
+      puts "✓ Patched Pods-QuickNovel-frameworks.sh to handle unbound variables"
+    end
+  end
 end
