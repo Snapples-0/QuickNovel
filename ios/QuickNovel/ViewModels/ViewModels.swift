@@ -130,8 +130,8 @@ class NovelDetailViewModel: ObservableObject {
             }
         }
         
-        // Default to first provider
-        return ProviderRegistry.shared.getAllProviders().first!
+        // Default to first provider or RoyalRoad as fallback
+        return ProviderRegistry.shared.getAllProviders().first ?? RoyalRoadProvider()
     }
 }
 
@@ -180,7 +180,8 @@ class ReaderViewModel: ObservableObject {
                 return provider
             }
         }
-        return ProviderRegistry.shared.getAllProviders().first!
+        // Default to RoyalRoad as fallback
+        return ProviderRegistry.shared.getAllProviders().first ?? RoyalRoadProvider()
     }
     
     private func loadSettings() {

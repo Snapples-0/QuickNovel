@@ -127,6 +127,7 @@ class DownloadManager: ObservableObject {
                 return provider
             }
         }
-        return ProviderRegistry.shared.getAllProviders().first!
+        // Default to RoyalRoad as fallback
+        return ProviderRegistry.shared.getAllProviders().first ?? RoyalRoadProvider()
     }
 }
