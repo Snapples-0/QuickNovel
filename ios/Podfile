@@ -26,7 +26,7 @@ post_install do |installer|
     script_content = File.read(frameworks_script_path)
     
     # Check if we've already patched this script
-    next if script_content.include?('set +u  # Allow unbound variables')
+    next if script_content.include?('set +u  # Allow unbound variables (fix for CocoaPods issue)')
     
     # Add 'set +u' after the shebang line
     lines = script_content.split("\n")
@@ -43,7 +43,7 @@ post_install do |installer|
     end
     
     if modified
-      File.write(frameworks_script_path, new_lines.join("\n"))
+      File.write(frameworks_script_path, new_lines.join("\n") + "\n")
       puts "✓ Patched #{File.basename(frameworks_script_path)} to handle unbound variables"
     end
   end
