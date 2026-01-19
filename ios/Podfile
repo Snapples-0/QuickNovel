@@ -18,60 +18,32 @@ post_install do |installer|
   end
   
   # Fix for unbound variable error in Pods-QuickNovel-frameworks.sh
-  # The script fails at line 42 when trying to source an unset variable
+  # The script fails when trying to source an unset variable
+  # Solution: Add 'set +u' near the top to disable unbound variable checking
   # GitHub Issue: https://github.com/CocoaPods/CocoaPods/issues/11402
   
-  # Find all framework scripts that need patching
   Dir.glob('Pods/Target Support Files/Pods-*/Pods-*-frameworks.sh').each do |frameworks_script_path|
-    frameworks_script = File.read(frameworks_script_path)
+    script_content = File.read(frameworks_script_path)
+    
+    # Check if we've already patched this script
+    next if script_content.include?('set +u  # Allow unbound variables (fix for CocoaPods issue)')
+    
+    # Add 'set +u' after the shebang line
+    lines = script_content.split("\n")
+    new_lines = []
     modified = false
     
-    # Strategy 1: Wrap source commands with conditional checks
-    # Replace any 'source "$VAR"' with proper null checks
-    substitution_count = 0
-    frameworks_script.gsub!(/^(\s*)source "\$([A-Z_][A-Z0-9_]*)"/) do |match|
-      substitution_count += 1
-      indent = $1
-      var_name = $2
-      "#{indent}if [ -n \"${#{var_name}:-}\" ] && [ -f \"$#{var_name}\" ]; then source \"$#{var_name}\"; fi"
-    end
-    
-    if substitution_count > 0
-      modified = true
-    end
-    
-    # Strategy 2: Temporarily disable unbound variable checking around source commands
-    # Insert 'set +u' before and 'set -u' after source commands if not already wrapped
-    if !modified
-      lines = frameworks_script.split("\n")
-      new_lines = []
-      i = 0
-      while i < lines.length
-        line = lines[i]
-        # If this is a source command and not already wrapped with our fix
-        if line =~ /^(\s*)source "\$([A-Z_][A-Z0-9_]*)"/ && !line.include?('if [ -n')
-          # Check if previous line already has set +u
-          prev_line = new_lines.last
-          unless prev_line&.include?('set +u')
-            new_lines << "set +u  # Temporarily allow unbound variables"
-            new_lines << line
-            new_lines << "set -u  # Re-enable unbound variable checking"
-            modified = true
-            i += 1
-            next
-          end
-        end
-        new_lines << line
-        i += 1
-      end
-      
-      if modified
-        frameworks_script = new_lines.join("\n")
+    lines.each_with_index do |line, index|
+      new_lines << line
+      # Insert 'set +u' right after the shebang (#!/bin/sh or #!/usr/bin/env bash)
+      if index == 0 && line.start_with?('#!')
+        new_lines << 'set +u  # Allow unbound variables (fix for CocoaPods issue)'
+        modified = true
       end
     end
     
     if modified
-      File.write(frameworks_script_path, frameworks_script)
+      File.write(frameworks_script_path, new_lines.join("\n") + "\n")
       puts "✓ Patched #{File.basename(frameworks_script_path)} to handle unbound variables"
     end
   end
