@@ -11,6 +11,12 @@ struct SettingsView: View {
     @AppStorage("autoDownloadChapters") private var autoDownloadChapters = false
     @AppStorage("cacheSize") private var cacheSize = 100.0
     
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+        return "\(version) (\(build))"
+    }
+    
     var body: some View {
         Form {
             Section(header: Text("General")) {
@@ -44,7 +50,7 @@ struct SettingsView: View {
                 HStack {
                     Text("Version")
                     Spacer()
-                    Text("3.4.1")
+                    Text(appVersion)
                         .foregroundColor(.secondary)
                 }
                 

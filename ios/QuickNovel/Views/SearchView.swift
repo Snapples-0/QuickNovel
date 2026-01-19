@@ -147,7 +147,7 @@ struct SearchResultCard: View {
                     Image(systemName: "star.fill")
                         .font(.caption)
                         .foregroundColor(.yellow)
-                    Text(String(format: "%.1f", Double(rating) / 20.0))
+                    Text(String(format: "%.1f", novel.ratingValue))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

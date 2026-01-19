@@ -142,6 +142,7 @@ class ReaderViewModel: ObservableObject {
     @Published var currentChapter: ChapterData?
     @Published var isLoading = false
     @Published var settings = ReadingSettings()
+    @Published var displayText: String = ""
     
     let chapters: [ChapterData]
     
@@ -162,6 +163,9 @@ class ReaderViewModel: ObservableObject {
             // Find provider for chapter URL
             let provider = findProvider(for: chapters[index].url)
             chapterContent = try await provider.loadHtml(url: chapters[index].url)
+            
+            // Cache display text
+            displayText = chapterContent?.plainText ?? HTMLParser.htmlToPlainText(chapterContent?.html ?? "")
             
             // Save reading progress
             saveProgress(chapterIndex: index)

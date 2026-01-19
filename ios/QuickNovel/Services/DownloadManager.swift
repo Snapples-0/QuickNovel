@@ -130,11 +130,3 @@ class DownloadManager: ObservableObject {
         return ProviderRegistry.shared.getAllProviders().first!
     }
 }
-
-// MARK: - String Extension
-extension String {
-    func sanitizedFilename() -> String {
-        let invalidCharacters = CharacterSet(charactersIn: ":/\\?%*|\"<>")
-        return self.components(separatedBy: invalidCharacters).joined(separator: "_")
-    }
-}

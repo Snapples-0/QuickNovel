@@ -118,7 +118,7 @@ struct NovelCard: View {
                     HStack {
                         Image(systemName: "star.fill")
                             .foregroundColor(.yellow)
-                        Text(String(format: "%.1f", Double(rating) / 20.0))
+                        Text(String(format: "%.1f", novel.ratingValue))
                             .font(.subheadline)
                     }
                 }

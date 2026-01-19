@@ -125,6 +125,11 @@ class NetworkManager {
         let expectedLength = httpResponse.expectedContentLength
         var downloadedData = Data()
         
+        // Reserve capacity for better performance
+        if expectedLength > 0 {
+            downloadedData.reserveCapacity(Int(expectedLength))
+        }
+        
         for try await byte in asyncBytes {
             downloadedData.append(byte)
             if expectedLength > 0 {
