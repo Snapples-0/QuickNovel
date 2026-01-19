@@ -1,9 +1,11 @@
 # QuickNovel
-Adfree FOSS Android app for downloading novels. It also functions as an Epub reader.
+Adfree FOSS app for downloading novels available on **Android** and **iOS**. It also functions as an Epub reader.
 
 **Discord:** https://discord.gg/5Hus6fM
 
-**Download:** https://github.com/LagradOst/QuickNovel/releases
+**Download:** 
+- **Android:** https://github.com/LagradOst/QuickNovel/releases
+- **iOS:** Build from source (see instructions below)
 
 **Providers used:** 
 
@@ -29,6 +31,46 @@ Adfree FOSS Android app for downloading novels. It also functions as an Epub rea
 - https://sakuranovel.id
 - https://www.scribblehub.com
 - https://wtr-lab.com
+
+## Building from Source
+
+### Android
+1. Clone the repository
+2. Open in Android Studio
+3. Build and run on your device or emulator
+
+### iOS
+1. Clone the repository
+2. Navigate to the `ios` directory
+3. Open `QuickNovel.xcodeproj` in Xcode
+4. Select your development team in the project settings
+5. Build and run on your device or simulator
+
+**Requirements:**
+- iOS 15.0 or later
+- Xcode 15.0 or later
+- Swift 5.9 or later
+
+## Features
+
+### Core Features
+- **Multi-Provider Search**: Search across 20+ novel sources simultaneously
+- **Novel Reading**: Customizable reading experience with font, size, color, and spacing options
+- **Chapter Management**: Browse, filter, and sort chapters
+- **Downloads**: Save novels as EPUB format for offline reading
+- **Text-to-Speech**: Built-in TTS with configurable speed and pitch
+- **Reading History**: Track your reading progress automatically
+- **Bookmarks**: Save your favorite novels for quick access
+- **Bionic Reading**: Optional text enhancement for improved readability
+- **Translation Support**: On-device translation (Android only currently)
+
+### iOS-Specific Features
+- Native SwiftUI interface
+- iCloud sync support (coming soon)
+- iPad optimization with split view
+- Apple Pencil support for annotations (coming soon)
+- Integration with iOS Reading List
+- AirDrop sharing of EPUB files
 
 **Screenshoots:**
 
