@@ -18,7 +18,23 @@ sudo gem install cocoapods
 
 ## Setup Instructions
 
-### Option A: Using Makefile (Recommended)
+### Option A: GitHub Actions (Automated CI/CD)
+
+The project includes a GitHub Actions workflow that automatically builds an IPA on every push.
+
+- **Workflow File**: `.github/workflows/build-ios.yml`
+- **Trigger**: Automatically runs on push to any branch
+- **Output**: Unsigned IPA file available as a workflow artifact
+
+**To download the IPA:**
+1. Go to the repository's "Actions" tab on GitHub
+2. Select the latest workflow run
+3. Download the "QuickNovel-iOS" artifact
+4. Extract the zip file to get the IPA
+
+**Note:** The automated workflow builds an unsigned IPA suitable for testing. For App Store distribution, you'll need to build locally with proper code signing (see Options B or C below).
+
+### Option B: Using Makefile (Recommended for Local Builds)
 
 The project includes a Makefile for streamlined building and IPA generation.
 
@@ -73,7 +89,7 @@ make clean-all
 make help
 ```
 
-### Option B: Using Xcode GUI
+### Option C: Using Xcode GUI
 
 #### 1. Clone the Repository
 ```bash
