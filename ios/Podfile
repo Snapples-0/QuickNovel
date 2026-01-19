@@ -31,16 +31,20 @@ post_install do |installer|
     # Add 'set +u' after the shebang line
     lines = script_content.split("\n")
     new_lines = []
+    modified = false
     
     lines.each_with_index do |line, index|
       new_lines << line
       # Insert 'set +u' right after the shebang (#!/bin/sh or #!/usr/bin/env bash)
       if index == 0 && line.start_with?('#!')
         new_lines << 'set +u  # Allow unbound variables (fix for CocoaPods issue)'
+        modified = true
       end
     end
     
-    File.write(frameworks_script_path, new_lines.join("\n"))
-    puts "✓ Patched #{File.basename(frameworks_script_path)} to handle unbound variables"
+    if modified
+      File.write(frameworks_script_path, new_lines.join("\n"))
+      puts "✓ Patched #{File.basename(frameworks_script_path)} to handle unbound variables"
+    end
   end
 end
