@@ -131,18 +131,12 @@ build-release:
 			-configuration $(CONFIGURATION_RELEASE) \
 			-sdk iphoneos \
 			-derivedDataPath $(BUILD_DIR)/DerivedData \
-			CODE_SIGN_IDENTITY="" \
-			CODE_SIGNING_REQUIRED=NO \
-			CODE_SIGNING_ALLOWED=NO \
 			| xcpretty || xcodebuild build \
 				-workspace $(WORKSPACE) \
 				-scheme $(SCHEME) \
 				-configuration $(CONFIGURATION_RELEASE) \
 				-sdk iphoneos \
-				-derivedDataPath $(BUILD_DIR)/DerivedData \
-				CODE_SIGN_IDENTITY="" \
-				CODE_SIGNING_REQUIRED=NO \
-				CODE_SIGNING_ALLOWED=NO; \
+				-derivedDataPath $(BUILD_DIR)/DerivedData; \
 	else \
 		echo "$(YELLOW)Workspace not found. Installing dependencies first...$(NC)"; \
 		$(MAKE) install; \
@@ -152,18 +146,12 @@ build-release:
 			-configuration $(CONFIGURATION_RELEASE) \
 			-sdk iphoneos \
 			-derivedDataPath $(BUILD_DIR)/DerivedData \
-			CODE_SIGN_IDENTITY="" \
-			CODE_SIGNING_REQUIRED=NO \
-			CODE_SIGNING_ALLOWED=NO \
 			| xcpretty || xcodebuild build \
 				-workspace $(WORKSPACE) \
 				-scheme $(SCHEME) \
 				-configuration $(CONFIGURATION_RELEASE) \
 				-sdk iphoneos \
-				-derivedDataPath $(BUILD_DIR)/DerivedData \
-				CODE_SIGN_IDENTITY="" \
-				CODE_SIGNING_REQUIRED=NO \
-				CODE_SIGNING_ALLOWED=NO; \
+				-derivedDataPath $(BUILD_DIR)/DerivedData; \
 	fi
 	@echo "$(GREEN)✓ Release build completed$(NC)"
 
@@ -209,7 +197,7 @@ export-options:
 	@echo '    <key>method</key>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '    <string>app-store</string>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '    <key>teamID</key>' >> $(EXPORT_OPTIONS_PLIST)
-	@echo '    <string>YOUR_TEAM_ID</string>' >> $(EXPORT_OPTIONS_PLIST)
+	@echo '    <string>XXXXXXXXXX</string>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '    <key>uploadBitcode</key>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '    <false/>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '    <key>uploadSymbols</key>' >> $(EXPORT_OPTIONS_PLIST)
@@ -218,7 +206,7 @@ export-options:
 	@echo '    <false/>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '</dict>' >> $(EXPORT_OPTIONS_PLIST)
 	@echo '</plist>' >> $(EXPORT_OPTIONS_PLIST)
-	@echo "$(YELLOW)Note: Edit $(EXPORT_OPTIONS_PLIST) and replace YOUR_TEAM_ID with your Apple Developer Team ID$(NC)"
+	@echo "$(YELLOW)Note: Edit $(EXPORT_OPTIONS_PLIST) and replace XXXXXXXXXX with your 10-character Apple Developer Team ID$(NC)"
 	@echo "$(GREEN)✓ ExportOptions.plist generated$(NC)"
 
 # Export IPA for App Store distribution
@@ -241,7 +229,6 @@ ipa: archive
 	@ls -lh $(IPA_DIR)/*.ipa
 
 # Export IPA for Ad-Hoc distribution
-ipa-adhoc: EXPORT_METHOD = ad-hoc
 ipa-adhoc:
 	@echo "$(GREEN)Exporting IPA for Ad-Hoc distribution...$(NC)"
 	@$(MAKE) archive
@@ -253,7 +240,7 @@ ipa-adhoc:
 	@echo '    <key>method</key>' >> $(EXPORT_OPTIONS_PLIST).adhoc
 	@echo '    <string>ad-hoc</string>' >> $(EXPORT_OPTIONS_PLIST).adhoc
 	@echo '    <key>teamID</key>' >> $(EXPORT_OPTIONS_PLIST).adhoc
-	@echo '    <string>YOUR_TEAM_ID</string>' >> $(EXPORT_OPTIONS_PLIST).adhoc
+	@echo '    <string>XXXXXXXXXX</string>' >> $(EXPORT_OPTIONS_PLIST).adhoc
 	@echo '    <key>uploadBitcode</key>' >> $(EXPORT_OPTIONS_PLIST).adhoc
 	@echo '    <false/>' >> $(EXPORT_OPTIONS_PLIST).adhoc
 	@echo '    <key>compileBitcode</key>' >> $(EXPORT_OPTIONS_PLIST).adhoc
@@ -283,7 +270,7 @@ ipa-development:
 	@echo '    <key>method</key>' >> $(EXPORT_OPTIONS_PLIST).dev
 	@echo '    <string>development</string>' >> $(EXPORT_OPTIONS_PLIST).dev
 	@echo '    <key>teamID</key>' >> $(EXPORT_OPTIONS_PLIST).dev
-	@echo '    <string>YOUR_TEAM_ID</string>' >> $(EXPORT_OPTIONS_PLIST).dev
+	@echo '    <string>XXXXXXXXXX</string>' >> $(EXPORT_OPTIONS_PLIST).dev
 	@echo '    <key>uploadBitcode</key>' >> $(EXPORT_OPTIONS_PLIST).dev
 	@echo '    <false/>' >> $(EXPORT_OPTIONS_PLIST).dev
 	@echo '    <key>compileBitcode</key>' >> $(EXPORT_OPTIONS_PLIST).dev

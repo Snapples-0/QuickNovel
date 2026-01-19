@@ -331,10 +331,10 @@ After running `make ipa` for the first time, edit the generated `ExportOptions.p
 
 ```xml
 <key>teamID</key>
-<string>YOUR_TEAM_ID</string>
+<string>XXXXXXXXXX</string>
 ```
 
-Replace `YOUR_TEAM_ID` with your actual 10-character Team ID from:
+Replace `XXXXXXXXXX` with your actual 10-character Team ID from:
 - Apple Developer Portal > Membership
 - Or Xcode > Preferences > Accounts > Your Team
 

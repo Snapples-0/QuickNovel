@@ -66,7 +66,7 @@ make help       # Show all available commands
 
 2. **Set Your Team ID:**
    - After running `make ipa` once, edit `ExportOptions.plist`
-   - Replace `YOUR_TEAM_ID` with your Apple Developer Team ID
+   - Replace `XXXXXXXXXX` with your 10-character Apple Developer Team ID
    - Find your Team ID in Apple Developer Portal > Membership
 
 ## Output Locations
@@ -99,7 +99,7 @@ make install
 4. Then retry the Makefile commands
 
 ### "YOUR_TEAM_ID not found"
-Edit `ExportOptions.plist` and set your real Team ID
+Edit `ExportOptions.plist` (or `.adhoc`/`.dev` variants) and replace `XXXXXXXXXX` with your actual 10-character Team ID
 
 ## More Information
 
