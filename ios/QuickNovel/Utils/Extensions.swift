@@ -16,6 +16,22 @@ extension SearchResponse {
     }
 }
 
+// MARK: - StreamResponse Extension
+extension StreamResponse {
+    var ratingValue: Double {
+        guard let rating = rating else { return 0 }
+        return Double(rating) / 20.0
+    }
+}
+
+// MARK: - EpubResponse Extension
+extension EpubResponse {
+    var ratingValue: Double {
+        guard let rating = rating else { return 0 }
+        return Double(rating) / 20.0
+    }
+}
+
 // MARK: - String Extension for Filename Sanitization
 extension String {
     func sanitizedFilename() -> String {

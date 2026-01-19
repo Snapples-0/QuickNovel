@@ -58,11 +58,11 @@ struct NovelDetailView: View {
                             if let rating = novel.rating {
                                 HStack {
                                     ForEach(0..<5) { index in
-                                        Image(systemName: index < rating ? "star.fill" : "star")
+                                        Image(systemName: index < Int(novel.ratingValue) ? "star.fill" : "star")
                                             .foregroundColor(.yellow)
                                             .font(.caption)
                                     }
-                                    Text(String(format: "%.1f", Double(rating)))
+                                    Text(String(format: "%.1f", novel.ratingValue))
                                         .font(.caption)
                                 }
                             }
