@@ -18,37 +18,94 @@ sudo gem install cocoapods
 
 ## Setup Instructions
 
-### 1. Clone the Repository
+### Option A: Using Makefile (Recommended)
+
+The project includes a Makefile for streamlined building and IPA generation.
+
+#### 1. Quick Setup
+```bash
+cd ios
+make setup
+```
+
+This will install all dependencies and prepare the project.
+
+#### 2. Building the App
+```bash
+# Build for simulator (Debug)
+make build
+
+# Build for device (Release)
+make build-release
+
+# Run on iOS Simulator
+make simulator
+```
+
+#### 3. Creating an IPA
+```bash
+# Generate IPA for App Store distribution
+make ipa
+
+# Generate IPA for Ad-Hoc distribution
+make ipa-adhoc
+
+# Generate IPA for Development
+make ipa-development
+```
+
+**Note:** Before creating IPAs, you need to:
+1. Configure code signing in Xcode
+2. Edit `ExportOptions.plist` and set your Apple Developer Team ID
+
+#### 4. Other Commands
+```bash
+# Run tests
+make test
+
+# Clean build artifacts
+make clean
+
+# Clean everything including dependencies
+make clean-all
+
+# Show all available commands
+make help
+```
+
+### Option B: Using Xcode GUI
+
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/LagradOst/QuickNovel.git
 cd QuickNovel
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 ```bash
 cd ios
 pod install
 ```
 
-### 3. Open the Project
+#### 3. Open the Project
 ```bash
 open QuickNovel.xcworkspace
 ```
 
 **Important:** Always open the `.xcworkspace` file, not the `.xcodeproj` file, when using CocoaPods.
 
-### 4. Configure Code Signing
+#### 4. Configure Code Signing
 1. In Xcode, select the `QuickNovel` project in the navigator
 2. Select the `QuickNovel` target
 3. Go to the "Signing & Capabilities" tab
 4. Select your development team from the dropdown
 5. Xcode will automatically manage your provisioning profile
 
-### 5. Select Your Target Device
+#### 5. Select Your Target Device
 - For simulator: Choose any iOS simulator from the device dropdown
 - For physical device: Connect your iPhone/iPad and select it from the dropdown
 
-### 6. Build and Run
+#### 6. Build and Run
 - Press `Cmd + R` or click the Play button in Xcode
 - The app will build and launch on your selected device
 
@@ -212,6 +269,92 @@ xcodebuild test -workspace QuickNovel.xcworkspace \
 - Or select Product > Test from the menu
 
 ## Distribution
+
+### Building IPA Files
+
+The project includes a Makefile for automated IPA generation. There are three distribution methods:
+
+#### 1. App Store Distribution
+For submitting to the App Store or TestFlight:
+```bash
+cd ios
+make ipa
+```
+
+This will:
+1. Create an archive of your app
+2. Export an IPA suitable for App Store submission
+3. Place the IPA in `build/ipa/`
+
+#### 2. Ad-Hoc Distribution
+For distributing to specific devices (up to 100 devices):
+```bash
+make ipa-adhoc
+```
+
+The IPA will be placed in `build/ipa/adhoc/`
+
+#### 3. Development Distribution
+For internal testing on development devices:
+```bash
+make ipa-development
+```
+
+The IPA will be placed in `build/ipa/development/`
+
+### Prerequisites for IPA Generation
+1. **Valid Apple Developer Account** ($99/year)
+2. **Code Signing Certificate** (Developer or Distribution)
+3. **Provisioning Profile** for your app
+4. **Team ID** from Apple Developer account
+
+### Configuring Code Signing for IPA
+
+1. Open the project in Xcode:
+   ```bash
+   open QuickNovel.xcworkspace
+   ```
+
+2. Select the QuickNovel project, then the QuickNovel target
+
+3. Go to "Signing & Capabilities" tab
+
+4. Check "Automatically manage signing"
+
+5. Select your Team from the dropdown
+
+6. For distribution builds, ensure you have a valid Distribution certificate
+
+### Setting Your Team ID
+
+After running `make ipa` for the first time, edit the generated `ExportOptions.plist`:
+
+```xml
+<key>teamID</key>
+<string>XXXXXXXXXX</string>
+```
+
+Replace `XXXXXXXXXX` with your actual 10-character Team ID from:
+- Apple Developer Portal > Membership
+- Or Xcode > Preferences > Accounts > Your Team
+
+### Manual Archive and Export (Alternative)
+
+If you prefer using Xcode GUI:
+
+1. **Create Archive:**
+   - Product > Archive
+   - Wait for the archive to complete
+   - Xcode Organizer will open automatically
+
+2. **Export IPA:**
+   - Select your archive in the Organizer
+   - Click "Distribute App"
+   - Choose distribution method:
+     - App Store Connect (for TestFlight/App Store)
+     - Ad Hoc (for specific devices)
+     - Development (for testing)
+   - Follow the wizard to export the IPA
 
 ### TestFlight
 1. Archive the app (Product > Archive)
