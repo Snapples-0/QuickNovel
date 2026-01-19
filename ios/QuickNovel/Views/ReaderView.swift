@@ -66,7 +66,7 @@ struct ReaderView: View {
                                 ProgressView()
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                            } else if let content = viewModel.chapterContent {
+                            } else if viewModel.chapterContent != nil {
                                 Text(viewModel.displayText)
                                     .font(.custom(viewModel.settings.fontName, size: viewModel.settings.fontSize))
                                     .foregroundColor(Color(hex: viewModel.settings.textColor))

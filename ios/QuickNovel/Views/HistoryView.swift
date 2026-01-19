@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+@available(iOS 16.0, *)
 struct HistoryView: View {
     @StateObject private var viewModel = HistoryViewModel()
     
