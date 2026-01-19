@@ -8,29 +8,21 @@
 import Foundation
 import SwiftUI
 
-// MARK: - SearchResponse Extension
-extension SearchResponse {
+// MARK: - Rating Value Extensions
+protocol RatingConvertible {
+    var rating: Int? { get }
+}
+
+extension RatingConvertible {
     var ratingValue: Double {
         guard let rating = rating else { return 0 }
         return Double(rating) / 20.0
     }
 }
 
-// MARK: - StreamResponse Extension
-extension StreamResponse {
-    var ratingValue: Double {
-        guard let rating = rating else { return 0 }
-        return Double(rating) / 20.0
-    }
-}
-
-// MARK: - EpubResponse Extension
-extension EpubResponse {
-    var ratingValue: Double {
-        guard let rating = rating else { return 0 }
-        return Double(rating) / 20.0
-    }
-}
+extension SearchResponse: RatingConvertible {}
+extension StreamResponse: RatingConvertible {}
+extension EpubResponse: RatingConvertible {}
 
 // MARK: - String Extension for Filename Sanitization
 extension String {
