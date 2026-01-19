@@ -59,21 +59,23 @@ jobs:
           </plist>
           EOF
           
-          xcodebuild -exportArchive \
+          # Try standard export (expected to fail without signing, but we'll try anyway)
+          if xcodebuild -exportArchive \
             -archivePath build/QuickNovel.xcarchive \
             -exportPath build/ipa \
             -exportOptionsPlist build/ExportOptions.plist \
-            -allowProvisioningUpdates || true
-          
-          # If the standard export fails, try to extract the app directly
-          if [ ! -f build/ipa/QuickNovel.ipa ]; then
-            echo "Standard export failed, creating IPA from archive manually..."
+            -allowProvisioningUpdates 2>&1; then
+            echo "✓ Standard IPA export succeeded"
+          else
+            echo "⚠ Standard export failed (expected without code signing)"
+            echo "Creating unsigned IPA from archive manually..."
             mkdir -p build/ipa/Payload
             cp -r build/QuickNovel.xcarchive/Products/Applications/QuickNovel.app build/ipa/Payload/
             cd build/ipa
             zip -r QuickNovel.ipa Payload
             rm -rf Payload
             cd ../..
+            echo "✓ Unsigned IPA created successfully"
           fi
 
       - name: Upload IPA Artifact
